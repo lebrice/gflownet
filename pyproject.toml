@@ -22,6 +22,7 @@ dependencies = [
     "orion>=0.2.7",
     "pandas",
     "plotly>=5.17.0",
+    "pyg-lib",
     "pymatgen==2024.3.1",
     "pyshtools==4.10.3",
     "pytorch-warmup>=0.2.0",
@@ -30,7 +31,11 @@ dependencies = [
     "scikit-learn>=1.2.2",
     "scipy>=1.11.2",
     "six>=1.16.0",
-    "torch==2.0.1",
+    "torch>=2.1.0",
+    "torch-cluster",
+    "torch-scatter>=2.1.2",
+    "torch-sparse",
+    "torch-spline-conv",
     "torchani==2.2.4",
     "torchtyping>=0.1.4",
     "tqdm",
@@ -45,23 +50,23 @@ build-backend = "hatchling.build"
 [tool.uv.sources]
 catkit = { git = "https://github.com/vict0rsch/CatKit.git" }
 dave = { git = "https://github.com/sh-divya/ActiveLearningMaterials.git", rev = "0.3.4" }
-pyg_lib = [{ index = "data_pyg" }]
-torch_scatter = [{ index = "data_pyg" }]
-torch_sparse = [{ index = "data_pyg" }]
-torch_cluster = [{ index = "data_pyg" }]
-torch_spline_conf = [{ index = "data_pyg" }]
-dgl = [{ index = "data_dgl" }]
+pyg_lib = [{ index = "pyg_index" }]
+torch_scatter = [{ index = "pyg_index" }]
+torch_sparse = [{ index = "pyg_index" }]
+torch_cluster = [{ index = "pyg_index" }]
+torch_spline_conf = [{ index = "pyg_index" }]
+dgl = [{ index = "data_index" }]
 ocpmodels = { git = "https://github.com/RolnickLab/ocp", rev = "uncertainty" }
 
 [[tool.uv.index]]
-name = "data_pyg"
+name = "pyg_index"
 url = "https://data.pyg.org/whl/torch-2.2.0+cu118.html"
 format = "flat"
 explicit = true
 
 
 [[tool.uv.index]]
-name = "data_dgl"
+name = "data_index"
 url = "https://data.dgl.ai/wheels/torch-2.1/cu118/repo.html"
 format = "flat"
 explicit = true
@@ -79,6 +84,12 @@ dev = [
     "pytest-repeat>=0.9.4",
 ]
 
+[[tool.uv.dependency-metadata]]
+name = "torch-spline-conf"
+version = "1.2.2"
+requires-dist = ["torch"]
+
 [tool.uv.extra-build-dependencies]
 torch_cluster = [{ requirement = "torch", match-runtime = true }]
 torch-scatter = [{ requirement = "torch", match-runtime = true }]
+torch-spline-conv = [{ requirement = "torch", match-runtime = true }]
