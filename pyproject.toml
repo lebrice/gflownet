@@ -31,7 +31,7 @@ dependencies = [
     "scikit-learn>=1.2.2",
     "scipy>=1.11.2",
     "six>=1.16.0",
-    "torch>=2.1.0",
+    "torch==2.4.0",
     "torch-cluster",
     "torch-scatter>=2.1.2",
     "torch-sparse",
@@ -47,6 +47,10 @@ requires = ["hatchling"]
 build-backend = "hatchling.build"
 
 
+[tool.uv]
+no-build-package = ["torch-spline-conv"]
+
+
 [tool.uv.sources]
 catkit = { git = "https://github.com/vict0rsch/CatKit.git" }
 dave = { git = "https://github.com/sh-divya/ActiveLearningMaterials.git", rev = "0.3.4" }
@@ -54,23 +58,29 @@ pyg_lib = [{ index = "pyg_index" }]
 torch_scatter = [{ index = "pyg_index" }]
 torch_sparse = [{ index = "pyg_index" }]
 torch_cluster = [{ index = "pyg_index" }]
-torch_spline_conf = [{ index = "pyg_index" }]
 dgl = [{ index = "data_index" }]
 ocpmodels = { git = "https://github.com/RolnickLab/ocp", rev = "uncertainty" }
+torch_spline_conv = [{ index = "torch_spline_conv_index" }]
+
 
 [[tool.uv.index]]
 name = "pyg_index"
-url = "https://data.pyg.org/whl/torch-2.2.0+cu118.html"
+url = "https://data.pyg.org/whl/torch-2.4.0+cu118.html"
 format = "flat"
 explicit = true
 
 
 [[tool.uv.index]]
 name = "data_index"
-url = "https://data.dgl.ai/wheels/torch-2.1/cu118/repo.html"
+url = "https://data.dgl.ai/wheels/torch-2.4/cu118/repo.html"
 format = "flat"
 explicit = true
 
+[[tool.uv.index]]
+name = "torch_spline_conv_index"
+url = "https://data.pyg.org/whl/torch-2.4.0+cu118.html"
+format = "flat"
+explicit = true
 
 [dependency-groups]
 dev = [
@@ -84,12 +94,15 @@ dev = [
     "pytest-repeat>=0.9.4",
 ]
 
-[[tool.uv.dependency-metadata]]
-name = "torch-spline-conf"
-version = "1.2.2"
-requires-dist = ["torch"]
+# [[tool.uv.dependency-metadata]]
+# name = "torch-spline-conf"
+# version = "1.2.2"
+# requires-dist = ["torch"]
 
 [tool.uv.extra-build-dependencies]
 torch_cluster = [{ requirement = "torch", match-runtime = true }]
 torch-scatter = [{ requirement = "torch", match-runtime = true }]
-torch-spline-conv = [{ requirement = "torch", match-runtime = true }]
+# torch-spline-conv = [
+#     { requirement = "torch", match-runtime = false },
+#     { requirement = "numpy", match-runtime = false },
+# ]
