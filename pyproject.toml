@@ -48,7 +48,7 @@ build-backend = "hatchling.build"
 
 
 [tool.uv]
-no-build-package = ["torch-spline-conv"]
+no-build-package = ["torch-spline-conv", "torch-scatter", "torch-cluster"]
 
 
 [tool.uv.sources]
@@ -94,14 +94,15 @@ dev = [
     "pytest-repeat>=0.9.4",
 ]
 
+# Uncomment these two blocks if you want to try to build these from source, for example for a different version of CUDA or pytorch.
 # [[tool.uv.dependency-metadata]]
 # name = "torch-spline-conf"
 # version = "1.2.2"
-# requires-dist = ["torch"]
+# requires-dist = ["torch", "numpy"]
 
-[tool.uv.extra-build-dependencies]
-torch_cluster = [{ requirement = "torch", match-runtime = true }]
-torch-scatter = [{ requirement = "torch", match-runtime = true }]
+# [tool.uv.extra-build-dependencies]
+# torch_cluster = [{ requirement = "torch", match-runtime = true }]
+# torch-scatter = [{ requirement = "torch", match-runtime = true }]
 # torch-spline-conv = [
 #     { requirement = "torch", match-runtime = false },
 #     { requirement = "numpy", match-runtime = false },
