@@ -7,36 +7,15 @@ authors = [{ name = "Alex", email = "alex.hernandez-garcia@mila.quebec" }]
 readme = "README.md"
 dependencies = [
     "botorch>=0.10.0",
-    "catkit",
-    "dave",
-    "dgl>=2.4.0",
-    "e3nn>=0.5.1",
-    "h5py>=3.14.0",
     "hydra-core>=1.3.2",
-    "matgl==1.1.3",
     "matplotlib",
-    "mendeleev<1.1",
-    "numba>=0.61.2",
     "numpy<2",
-    "ocpmodels",
-    "orion>=0.2.7",
     "pandas",
     "plotly>=5.17.0",
-    "pyg-lib",
-    "pymatgen==2024.3.1",
-    "pyshtools==4.10.3",
-    "pytorch-warmup>=0.2.0",
-    "pyxtal>=0.6.1",
-    "rdkit==2023.3.1",
     "scikit-learn>=1.2.2",
     "scipy>=1.11.2",
     "six>=1.16.0",
-    "torch==2.4.0",
-    "torch-cluster",
-    "torch-scatter>=2.1.2",
-    "torch-sparse",
-    "torch-spline-conv",
-    "torchani==2.2.4",
+    "torch==2.5.1",
     "torchtyping>=0.1.4",
     "tqdm",
     "wandb>=0.15.11",
@@ -48,19 +27,20 @@ build-backend = "hatchling.build"
 
 
 [tool.uv]
+# Use this to avoid building those from source (but you can also try if you want).
 no-build-package = ["torch-spline-conv", "torch-scatter", "torch-cluster"]
 
 
 [tool.uv.sources]
 catkit = { git = "https://github.com/vict0rsch/CatKit.git" }
-dave = { git = "https://github.com/sh-divya/ActiveLearningMaterials.git", rev = "0.3.4" }
+dave = { git = "https://github.com/sh-divya/crystalproxies.git", rev = "2.0.3" }
+dgl = [{ index = "dgl_index" }]
+ocpmodels = { git = "https://github.com/RolnickLab/ocp", rev = "uncertainty" }
 pyg_lib = [{ index = "pyg_index" }]
+torch_cluster = [{ index = "pyg_index" }]
 torch_scatter = [{ index = "pyg_index" }]
 torch_sparse = [{ index = "pyg_index" }]
-torch_cluster = [{ index = "pyg_index" }]
-dgl = [{ index = "data_index" }]
-ocpmodels = { git = "https://github.com/RolnickLab/ocp", rev = "uncertainty" }
-torch_spline_conv = [{ index = "torch_spline_conv_index" }]
+torch_spline_conv = [{ index = "pyg_index" }]
 
 
 [[tool.uv.index]]
@@ -69,18 +49,12 @@ url = "https://data.pyg.org/whl/torch-2.4.0+cu118.html"
 format = "flat"
 explicit = true
 
-
 [[tool.uv.index]]
-name = "data_index"
+name = "dgl_index"
 url = "https://data.dgl.ai/wheels/torch-2.4/cu118/repo.html"
 format = "flat"
 explicit = true
 
-[[tool.uv.index]]
-name = "torch_spline_conv_index"
-url = "https://data.pyg.org/whl/torch-2.4.0+cu118.html"
-format = "flat"
-explicit = true
 
 [dependency-groups]
 dev = [
@@ -93,17 +67,35 @@ dev = [
     "pytest>=8.4.2",
     "pytest-repeat>=0.9.4",
 ]
+materials = [
+    "dave",
+    "pymatgen>=2024.3.1",
+    "pyshtools>=4.10.3",
+    "torch-cluster>=1.6.3",
+    "torch-scatter>=2.1.2",
+    "torch-sparse>=0.6.18",
+    "torch-spline-conv>=1.2.2",
+    "torchani>=2.2.4",
+]
+molecules = ["rdkit>=2023.3.1", "torch-geometric>=2.6.1", "torchani>=2.2.4"]
+tree = ["torch-geometric>=2.6.1"]
 
 # Uncomment these two blocks if you want to try to build these from source, for example for a different version of CUDA or pytorch.
-# [[tool.uv.dependency-metadata]]
-# name = "torch-spline-conf"
-# version = "1.2.2"
-# requires-dist = ["torch", "numpy"]
+[[tool.uv.dependency-metadata]]
+name = "torch-spline-conv"
+version = "1.2.2"
+requires-dist = ["torch", "numpy"]
 
-# [tool.uv.extra-build-dependencies]
-# torch_cluster = [{ requirement = "torch", match-runtime = true }]
-# torch-scatter = [{ requirement = "torch", match-runtime = true }]
-# torch-spline-conv = [
-#     { requirement = "torch", match-runtime = false },
-#     { requirement = "numpy", match-runtime = false },
-# ]
+[[tool.uv.dependency-metadata]]
+name = "torch-geometric"
+version = "2.6.1"
+requires-dist = ["torch"]
+
+
+[tool.uv.extra-build-dependencies]
+torch_cluster = [{ requirement = "torch", match-runtime = true }]
+torch-scatter = [{ requirement = "torch", match-runtime = true }]
+torch-spline-conv = [
+    { requirement = "torch", match-runtime = true },
+    { requirement = "numpy", match-runtime = true },
+]
