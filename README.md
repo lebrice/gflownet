@@ -103,6 +103,7 @@ The above command will install the minimum set of dependencies to run the core f
 - `dev`: dependencies for development, such as linting and testing packages.
 - `materials`: dependencies for materials applications, such as the Crystal-GFN.
 - `molecules`: dependencies for molecular modelling and generation, such the Conformer-GFN.
+- `tree`: dependencies for the decision-tree environment.
 
 Extras can be installed by specifying the tags in square brackets:
 
@@ -141,6 +142,29 @@ source install.sh --cpu --envpath ~/myenvs/gflownet-env --extras dev,materials
 ```
 
 to install an environment on `~/myenvs/gflownet-env`, with a CPU-only PyTorch and the dev and materials extras.
+
+### Installing with `uv`
+
+The project can also be installed with [`uv`](https://docs.astral.sh/uv/), which resolves and installs everything—including PyTorch and the compiled extras below—in a single step:
+
+```bash
+git clone git@github.com:alexhernandezgarcia/gflownet.git
+cd gflownet
+uv sync --all-extras
+```
+
+This creates a `.venv` with every extra (`dev`, `materials`, `molecules`, `tree`) installed, pinned to the Python version recorded in `.python-version`. To install only a subset of extras, e.g. just `materials`:
+
+```bash
+uv sync --extra materials
+```
+
+Then run commands with `uv run`, e.g. `uv run python train.py env=grid proxy=box/corners`, or activate the environment as usual with `source .venv/bin/activate`.
+
+A couple of notes on the compiled dependencies:
+
+- `torch==2.5.1` is installed from the default PyPI wheel, which bundles CUDA 12.4. `torch_scatter` (needed for the `materials` extra) is pulled from the matching [PyG wheel index](https://data.pyg.org/whl/), configured in `pyproject.toml` via `[tool.uv.index]`. If you need a different CUDA build (or a CPU-only one), install the matching `torch` build yourself and point the `pyg_index` URL in `pyproject.toml` at the corresponding `https://data.pyg.org/whl/torch-<version>+<cpu|cuXXX>.html` index before running `uv sync`.
+- `dave` (part of `materials`) is pulled directly from its git repository via `[tool.uv.sources]`.
 
 ## Quickstart: How to train a GFlowNet model
 

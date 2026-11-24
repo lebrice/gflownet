@@ -22,6 +22,7 @@ dependencies = [
     "numpy >=1.26.4,<2.0.0",
     "pandas",
     "plotly >=5.17.0",
+    "pyro-ppl >=1.9.0",
     "scikit-learn >=1.2.2",
     "scipy >=1.11.2",
     "six >=1.16.0",
@@ -58,7 +59,7 @@ dev = [
 # TODO: Consider relaxing the == dependency of pymatgen. As of Feb 2025, the latest version
 # is problematic. ==2024.3.1 is the minimum version required by pyxtal.
 materials = [
-    "dave @ git+https://github.com:sh-divya/crystalproxies.git@2.0.6",
+    "dave",
     "pymatgen ==2024.3.1",
     "pyshtools >=4.10.3",
     "pyxtal >=0.6.1",
@@ -79,3 +80,24 @@ tree = [
 [build-system]
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
+
+[tool.uv]
+# torch_scatter ships prebuilt wheels on the PyG index (see [[tool.uv.index]] below);
+# building it from source requires a matching nvcc/torch dev setup, so avoid it.
+no-build-package = ["torch_scatter"]
+
+[tool.uv.sources]
+# PEP 508 direct references (`name @ git+...`) in [project.optional-dependencies] are
+# not resolved by uv the same way pip does; use an explicit source instead. This also
+# fixes the upstream URL, which had a typo (`github.com:` instead of `github.com/`).
+dave = { git = "https://github.com/sh-divya/crystalproxies.git", rev = "2.0.6" }
+torch_scatter = [{ index = "pyg_index" }]
+
+[[tool.uv.index]]
+# Prebuilt wheels matching torch==2.5.1's default PyPI build (bundles CUDA 12.4).
+# If you install a different torch build (e.g. CPU-only or another CUDA version),
+# point this at the matching index from https://data.pyg.org/whl/ instead.
+name = "pyg_index"
+url = "https://data.pyg.org/whl/torch-2.5.0+cu124.html"
+format = "flat"
+explicit = true
